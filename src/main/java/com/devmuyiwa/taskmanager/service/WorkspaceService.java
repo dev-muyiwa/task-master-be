@@ -8,6 +8,7 @@ import com.devmuyiwa.taskmanager.exception.ResourceNotFoundException;
 import com.devmuyiwa.taskmanager.model.User;
 import com.devmuyiwa.taskmanager.model.Workspace;
 import com.devmuyiwa.taskmanager.model.WorkspaceMember;
+import com.devmuyiwa.taskmanager.repository.WorkspaceMemberRepository;
 import com.devmuyiwa.taskmanager.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WorkspaceService {
     private final WorkspaceRepository workspaceRepository;
+    private final WorkspaceMemberRepository workspaceMemberRepository;
 
     public WorkspaceMember createWorkspaceWithOwner(User user, RegisterRequest request) {
         Workspace workspace = Workspace.builder()
@@ -59,7 +61,8 @@ public class WorkspaceService {
 
     @Transactional(readOnly = true)
     public List<WorkspaceResponse> getUserWorkspaces(User user) {
-        return user.getWorkspaceMemberships().stream()
+        List<WorkspaceMember> memberships = workspaceMemberRepository.findAllByUserId(user.getId());
+        return memberships.stream()
                 .map(membership -> {
                     Workspace workspace = membership.getWorkspace();
                     return WorkspaceResponse.builder()
@@ -77,7 +80,7 @@ public class WorkspaceService {
 
     @Transactional(readOnly = true)
     public UserWorkspaceDetails getUserWorkspaceDetails(User user, UUID workspaceId) {
-        WorkspaceMember membership = user.getWorkspaceMemberships().stream()
+        WorkspaceMember membership = workspaceMemberRepository.findAllByUserId(user.getId()).stream()
                 .filter(m -> m.getWorkspace().getId().equals(workspaceId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("User is not a member of this workspace"));
