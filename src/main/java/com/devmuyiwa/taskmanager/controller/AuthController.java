@@ -51,7 +51,7 @@ public class AuthController {
             return ResponseEntity.ok(ApiResponse.success(response, "User registered successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                    .body(ApiResponse.error("Registration failed: " + e.getMessage()));
+                    .body(ApiResponse.error(e.getMessage()));
         }
     }
 

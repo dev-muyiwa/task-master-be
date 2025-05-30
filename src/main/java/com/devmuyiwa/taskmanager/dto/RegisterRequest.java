@@ -3,6 +3,7 @@ package com.devmuyiwa.taskmanager.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,13 +50,17 @@ public class RegisterRequest {
     private String workspaceName;
 
     @Schema(
-        description = "User's password. Must be at least 8 characters long and contain at least one uppercase letter, " +
-                     "one lowercase letter, one number, and one special character",
-        example = "P@ssword123",
-        requiredMode = Schema.RequiredMode.REQUIRED,
-        minLength = 8
+            description = "User's password. Must be at least 8 characters long and contain at least one uppercase letter, " +
+                    "one lowercase letter, one number, and one special character",
+            example = "P@ssword-123!",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            minLength = 8
     )
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$",
+            message = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    )
     private String password;
 }

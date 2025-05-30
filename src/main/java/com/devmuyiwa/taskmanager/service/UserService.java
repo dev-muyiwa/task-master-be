@@ -34,10 +34,6 @@ public class UserService {
             throw new AuthException.EmailAlreadyExistsException(request.getEmail());
         }
 
-        if (!PASSWORD_PATTERN.matcher(request.getPassword()).matches()) {
-            throw new AuthException.WeakPasswordException();
-        }
-
         User user = User.builder()
                 .email(request.getEmail().toLowerCase().trim())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))

@@ -7,7 +7,7 @@ public class AuthException extends RuntimeException {
 
     public static class EmailAlreadyExistsException extends AuthException {
         public EmailAlreadyExistsException(String email) {
-            super("Email already registered: " + email);
+            super("An account already exists with this email");
         }
     }
 

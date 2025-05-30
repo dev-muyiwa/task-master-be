@@ -26,7 +26,7 @@ public class LoginRequest {
 
     @Schema(
         description = "Password (minimum 8 characters)",
-        example = "P@ssword-123",
+        example = "P@ssword-123!",
         requiredMode = Schema.RequiredMode.REQUIRED,
         minLength = 8
     )
